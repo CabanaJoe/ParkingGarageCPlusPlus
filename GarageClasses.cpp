@@ -42,6 +42,11 @@ ParkingSpot::ParkingSpot(int spot_ID, string spot_type, bool spot_status)
     OccupiedStatus = spot_status; // is it ocupado or no senor.
 }
 
+// The following construct has no parameters
+ParkingGarage::ParkingGarage()
+{
+
+}
 
 
 // Getters for classes.
@@ -120,6 +125,22 @@ void ParkingSpot::SetSpotStatus(bool spot_status)
 }
 
 
+// MISC for the ParkingGarage class.
+
+void ParkingGarage::ParkVehicle(const Vehicle &vehicle)
+{
+}
+
+void ParkingGarage::RemoveVehicle(const string &licenseplate)
+{
+}
+
+int ParkingGarage::CheckAvailableSpots(const string &type) const
+{
+    return 0;
+}
+
+
 // Printers for all classes start here.
 
 // Vehicle Printer public member to print Vehicle information.
@@ -133,4 +154,9 @@ void Vehicle::PrintVehicleInfo()
 void ParkingSpot::PrintParkingSpotInfo()
 {
     cout << "User SpotID is: " << SpotID << ". The SpotType is: " << SpotType << ". Occupied?: " << OccupiedStatus << endl;
+}
+
+// ParkingGarage printer, public member to print parking garage info.
+void ParkingGarage::PrintParkingInfo() const
+{
 }

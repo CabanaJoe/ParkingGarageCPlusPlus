@@ -4,6 +4,7 @@
 // precrocessors 
 #include <iostream>
 #include <string>
+#include <vector>
 
 
 using namespace std; //this is for cout so i dont have to use std::cout everytime
@@ -52,7 +53,6 @@ using namespace std; //this is for cout so i dont have to use std::cout everytim
     public: // access specifier
 
     // Contructors
-
     ParkingSpot();
     ParkingSpot(int spot_ID, string spot_type, bool spot_status);
 
@@ -83,14 +83,46 @@ using namespace std; //this is for cout so i dont have to use std::cout everytim
  };
 
 
- 
+
  // creating a class for ParkingGarage
  // work on at the end.
+ /**
+ * Create a class for ParkingGarage
+ * garage contains multiple spots (vector)
+ * should support
+ * parking a vehicle
+ * removing a vehicle
+ * checking available spots by type
+ * prevent duplicate parking of the same vehicle
+  */
+ // Garage manages spots, and spots handle cars.
  class ParkingGarage {
-    // data members
+
+   public: // access specifier
+
+   // Constructors
+   ParkingGarage();
+
+   //getters
+
+   // setters N/A
+
+
+   // MISC.
+  // We pass parameters by const reference to avoid unnecessary copying
+  // and improve performance, especially for larger objects like Vehicle
+  // and string. The const keyword ensures the data cannot be modified.
+  // This supports efficient and safe object-oriented design.
+   void ParkVehicle(const Vehicle& vehicle);
+	void RemoveVehicle(const string& licenseplate);
+   int CheckAvailableSpots(const string& type) const;
+
+
+   // printers
+   void PrintParkingInfo() const;
+
+    // data members variables and what nots
     private: //access specifier
-
-    public: // access specifier
-
+    vector <ParkingSpot> spots;
  };
  #endif // end of the header guard to ensure the header file is only included once.
