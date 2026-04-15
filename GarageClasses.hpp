@@ -22,8 +22,8 @@ using namespace std; //this is for cout so i dont have to use std::cout everytim
 
     // getters
     // Returning a string with both of them.
-    string GetLicensePlate();
-    string GetVehicleType();
+    string GetLicensePlate() const;
+    string GetVehicleType() const;
 
     // setters
     // nothing to return (void)
@@ -58,19 +58,21 @@ using namespace std; //this is for cout so i dont have to use std::cout everytim
 
 
     // getters
-    int GetSpotID();
-    string GetSpotType();
-    bool GetSpotStatus();
+    int GetSpotID() const;
+    string GetSpotType() const;
+    bool GetSpotStatus() const;
+    string GetParkedLicense() const;
 
 
     // setters
     void SetSpotID(int spot_ID);
     void SetSpotType(string spot_type);
     void SetSpotStatus(bool spot_status);
+    void SetParkedLicense(string palte);
 
 
     // printers
-    void PrintParkingSpotInfo();
+    void PrintParkingSpotInfo() const;
 
 
     // usually going to be variables.
@@ -79,6 +81,7 @@ using namespace std; //this is for cout so i dont have to use std::cout everytim
     int SpotID; // unique numerical spot identifier.
     string SpotType; // car, motorcycle, truck
     bool OccupiedStatus; // true if occupied, and false if space is available.
+    string parkedLicensePlate;
 
  };
 
@@ -102,8 +105,7 @@ using namespace std; //this is for cout so i dont have to use std::cout everytim
 
    // Constructors
    ParkingGarage();
-
-   //getters
+   ParkingGarage(int numCar, int numMotorcycle, int numTruck);
 
    // setters N/A
 
@@ -124,5 +126,6 @@ using namespace std; //this is for cout so i dont have to use std::cout everytim
     // data members variables and what nots
     private: //access specifier
     vector <ParkingSpot> spots;
+    vector <Vehicle> parkedVehicles; // tracks whats parked
  };
  #endif // end of the header guard to ensure the header file is only included once.

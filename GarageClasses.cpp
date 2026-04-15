@@ -42,48 +42,66 @@ ParkingSpot::ParkingSpot(int spot_ID, string spot_type, bool spot_status)
     OccupiedStatus = spot_status; // is it ocupado or no senor.
 }
 
-// The following construct has no parameters
-ParkingGarage::ParkingGarage()
+
+ParkingGarage::ParkingGarage(int numCar, int numMotorcycle, int numTruck)
 {
-
+    int spotID = 1;
+    
+    
+    for(int i = 0; i < numCar; i++)
+    {
+        spots.push_back(ParkingSpot( spotID, "car", false));
+        spotID++;
+    }
+    for(int i = 0; i < numMotorcycle; i++)
+    {
+        spots.push_back(ParkingSpot( spotID, "motorcycle", false));
+        spotID++;
+    }
+    for(int i = 0; i < numTruck; i++)
+    {
+        spots.push_back(ParkingSpot( spotID, "truck", false));
+        spotID++;
+    }
 }
-
-
 // Getters for classes.
 
 // vehicle class getters.
 // a public member which returns License Plate number for user.
-string Vehicle::GetLicensePlate()
+string Vehicle::GetLicensePlate() const
 {
     return LicensePlate;
 }
 
 // public memeber which returns Vehicle type for user.
-string Vehicle::GetVehicleType()
+string Vehicle::GetVehicleType() const
 {
     return VehicleType;
 }
 
 // ParkingSpot class getter 
 // a public member which returns spot id for user.
-int ParkingSpot::GetSpotID()
+int ParkingSpot::GetSpotID() const
 {
     return SpotID;
 }
 
 // a public member which returns spot type for user.
-string ParkingSpot::GetSpotType()
+string ParkingSpot::GetSpotType() const
 {
     return SpotType;
 }
 
 // a public member which returns spot occupation status for user.
-bool ParkingSpot::GetSpotStatus()
+bool ParkingSpot::GetSpotStatus() const
 {
     return OccupiedStatus;
 }
 
-
+string ParkingSpot::GetParkedLicense() const
+{
+    return parkedLicensePlate;
+}
 
 // Setters for classes
 
@@ -124,20 +142,92 @@ void ParkingSpot::SetSpotStatus(bool spot_status)
     OccupiedStatus = spot_status;
 }
 
+void ParkingSpot::SetParkedLicense(string plate)
+{
+    parkedLicensePlate = plate;
+}
+
 
 // MISC for the ParkingGarage class.
 
 void ParkingGarage::ParkVehicle(const Vehicle &vehicle)
 {
+    for(int i = 0; i < parkedVehicles.size(); i++)
+    {
+        if( parkedVehicles[i].GetLicensePlate() == vehicle.GetLicensePlate())
+        {
+            printf("Vehicle already parked.\n");
+            return;
+        }
+    }
+
+    for(int i = 0; i < spots.size(); i++)
+    {
+        if(spots[i].GetSpotStatus() == false)
+        {
+            bool valid = false;
+
+             if(vehicle.GetVehicleType() == "truck")
+             {
+                valid = (spots[i].GetSpotType() == "truck");
+             }
+             else if(vehicle.GetVehicleType() == "car")
+             {
+                valid = (spots[i].GetSpotType() == "car" || spots[i].GetSpotType() == "truck" );
+             }
+             else
+             {
+                valid = true;
+             }
+
+             if(valid)
+             {
+                spots[i].SetSpotStatus(true);
+                spots[i].SetParkedLicense(vehicle.GetLicensePlate());
+                parkedVehicles.push_back(vehicle);
+                printf("Vehicles parked succesfully.\n");
+                return;
+             }
+        }
+    }
+
+    printf("No available spots, garage full.\n");
 }
 
 void ParkingGarage::RemoveVehicle(const string &licenseplate)
 {
+    for(int i = 0 ; i < parkedVehicles.size(); i ++)
+    {
+        if(parkedVehicles[i].GetLicensePlate() == licenseplate)
+        {
+            for(int j = 0; j < spots.size(); j++)
+            {
+                if(spots[j].GetParkedLicense() == licenseplate)
+                {
+                    spots[j].SetSpotStatus(false);
+                    spots[j].SetParkedLicense("");
+                    parkedVehicles.erase(parkedVehicles.begin() + i);
+                    printf("Vehicle removed succesfully!\n");
+                    return;
+                }
+            }
+        }
+    }
+    printf("Vehicle not found.\n");
 }
 
 int ParkingGarage::CheckAvailableSpots(const string &type) const
 {
-    return 0;
+    int count = 0;
+
+    for(int i = 0; i < spots.size(); i ++)
+    {
+        if(spots[i].GetSpotStatus() == false && spots[i].GetSpotType() == type)
+        {
+            count++;
+        }
+    }
+    return count;
 }
 
 
@@ -151,7 +241,7 @@ void Vehicle::PrintVehicleInfo()
 }
 
 // ParkingSpot printer, public member to print parking spot info.
-void ParkingSpot::PrintParkingSpotInfo()
+void ParkingSpot::PrintParkingSpotInfo() const
 {
     cout << "User SpotID is: " << SpotID << ". The SpotType is: " << SpotType << ". Occupied?: " << OccupiedStatus << endl;
 }
@@ -159,4 +249,8 @@ void ParkingSpot::PrintParkingSpotInfo()
 // ParkingGarage printer, public member to print parking garage info.
 void ParkingGarage::PrintParkingInfo() const
 {
+    for(int i = 0; i < spots.size(); i ++)
+    {
+        spots[i].PrintParkingSpotInfo();
+    }
 }
